@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinFlow · Kimberly</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f0eb;--sur:#fff;--brd:#e8ddd4;--acc:#c8834a;--a4:#4a7fa8;--txt:#2a1f14;--mu:#9e8878;--inc:#3d7a56;--exp:#c04a3a;--sav:#4a7fa8;--sh:0 4px 20px rgba(42,31,20,.09);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{height:100%;}
+body{background:var(--bg);color:var(--txt);font-family:'Nunito',sans-serif;min-height:100vh;min-height:-webkit-fill-available;display:flex;justify-content:center;overflow-x:hidden;-webkit-text-size-adjust:100%;}
+.app{width:100%;max-width:430px;min-height:100vh;background:var(--bg);padding-bottom:100px;}
+.screen{display:none;}.screen.active{display:block;animation:fu .3s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* TOPBAR */
+.tb{padding:52px 18px 12px;display:flex;justify-content:space-between;align-items:center;}
+.brand{font-family:'Playfair Display',serif;font-size:19px;color:var(--acc);}
+.sub{font-size:11px;color:var(--mu);margin-top:1px;}
+.ava{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--acc),#e8a87c);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
+.back{font-size:14px;color:var(--acc);cursor:pointer;margin-bottom:2px;padding:4px 0;touch-action:manipulation;}
+
+/* HERO */
+.hero{margin:0 14px 14px;background:linear-gradient(135deg,#2a1f14,#4a3020 60%,#3a2518);border-radius:22px;padding:22px 18px 18px;position:relative;overflow:hidden;box-shadow:0 8px 30px rgba(42,31,20,.25);}
+.hero::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(200,131,74,.2),transparent 70%);pointer-events:none;}
+.h-lbl{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;}
+.h-name{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:3px;}
+.h-bal{font-family:'Playfair Display',serif;font-size:34px;color:#fff;line-height:1;margin-bottom:2px;}
+.h-bal em{font-size:18px;font-style:normal;color:rgba(255,255,255,.6);}
+.h-msg{font-size:11px;color:var(--acc);margin-bottom:14px;}
+.h-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.h-stat{background:rgba(255,255,255,.07);border-radius:12px;padding:9px 11px;border:1px solid rgba(255,255,255,.06);}
+.h-stat-lbl{font-size:9px;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;}
+.h-stat-val{font-size:14px;font-weight:700;}
+.c-inc{color:#6dd49a;}.c-exp{color:#f08080;}.c-sav{color:#7ab8e8;}.c-deb{color:#f0b060;}
+
+/* SECTION */
+.sec{padding:0 14px 8px;}
+.sec-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.sec-title{font-family:'Playfair Display',serif;font-size:16px;}
+
+/* CARD */
+.card{background:var(--sur);border-radius:16px;padding:15px;border:1px solid var(--brd);box-shadow:var(--sh);margin-bottom:11px;}
+.card-title{font-family:'Playfair Display',serif;font-size:14px;margin-bottom:3px;}
+.card-sub{font-size:11px;color:var(--mu);margin-bottom:11px;}
+
+/* GRID MÓDULOS */
+.mod-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.mod{background:var(--sur);border-radius:14px;padding:13px 11px;border:1px solid var(--brd);cursor:pointer;touch-action:manipulation;box-shadow:var(--sh);text-align:center;-webkit-user-select:none;user-select:none;transition:transform .12s;}
+.mod:active{transform:scale(.96);border-color:var(--acc);}
+.mod-ic{font-size:20px;margin-bottom:4px;}
+.mod-lbl{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.4px;font-weight:700;margin-bottom:2px;}
+.mod-val{font-size:12px;font-weight:700;}
+
+/* FORM */
+.fl{margin-bottom:9px;}
+.fl label{font-size:11px;color:var(--mu);letter-spacing:.4px;text-transform:uppercase;font-weight:700;margin-bottom:4px;display:block;}
+.fi{width:100%;background:var(--bg);border:1.5px solid var(--brd);border-radius:11px;padding:12px 13px;color:var(--txt);font-family:'Nunito',sans-serif;font-size:16px;outline:none;-webkit-appearance:none;appearance:none;touch-action:manipulation;transition:border-color .2s,background .2s;}
+.fi:focus{border-color:var(--acc);background:#fff;}
+.fi::placeholder{color:var(--mu);}
+select.fi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239e8878'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:10px;padding-right:30px;cursor:pointer;}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.fsec{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:7px 11px;border-radius:7px;display:flex;align-items:center;gap:5px;margin:14px 0 9px;}
+.fsec.i{background:rgba(61,122,86,.1);color:var(--inc);}
+.fsec.e{background:rgba(192,74,58,.08);color:var(--exp);}
+.fsec.s{background:rgba(74,127,168,.08);color:var(--sav);}
+.fsec.r{background:rgba(200,131,74,.08);color:var(--acc);}
+
+/* BUDGET BARS */
+.bbar{margin-bottom:13px;}
+.bbar-hd{display:flex;justify-content:space-between;margin-bottom:4px;}
+.bbar-nm{font-size:12px;font-weight:600;}
+.bbar-pc{font-size:11px;color:var(--mu);}
+.bbar-bg{height:6px;background:var(--brd);border-radius:3px;overflow:hidden;}
+.bbar-fill{height:100%;border-radius:3px;transition:width .6s ease;}
+.bbar-bt{display:flex;justify-content:space-between;margin-top:3px;}
+.bv{font-size:10px;color:var(--mu);}.bv.ok{color:var(--inc);font-weight:700;}.bv.warn{color:var(--exp);font-weight:700;}
+
+/* BOTONES */
+.btn{display:block;width:100%;padding:14px;border-radius:13px;border:none;font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-align:center;-webkit-appearance:none;touch-action:manipulation;-webkit-user-select:none;transition:transform .12s;}
+.btn-p{background:linear-gradient(135deg,var(--acc),#e8a87c);color:#fff;box-shadow:0 4px 14px rgba(200,131,74,.3);}
+.btn-p:active{transform:scale(.98);}
+.btn-g{background:var(--bg);color:var(--txt);border:1.5px solid var(--brd);}
+.btn-r{background:rgba(192,74,58,.08);color:var(--exp);border:1.5px solid rgba(192,74,58,.2);}
+.btn-sm{padding:8px 14px;font-size:13px;border-radius:9px;width:auto;display:inline-block;}
+.btn-row{display:flex;gap:8px;margin-top:4px;}
+.btn-row .btn{flex:1;}
+
+/* ITEMS EDITABLES */
+.item-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(232,221,212,.5);}
+.item-row:last-child{border-bottom:none;}
+.item-ic{font-size:18px;flex-shrink:0;width:28px;text-align:center;}
+.item-info{flex:1;min-width:0;}
+.item-name{font-size:13px;font-weight:600;}
+.item-sub{font-size:11px;color:var(--mu);}
+.item-val{font-size:14px;font-weight:700;flex-shrink:0;}
+.item-actions{display:flex;gap:6px;flex-shrink:0;}
+.ic-btn{width:28px;height:28px;border-radius:8px;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;touch-action:manipulation;-webkit-appearance:none;}
+.ic-btn.edit{background:rgba(200,131,74,.1);color:var(--acc);}
+.ic-btn.del{background:rgba(192,74,58,.08);color:var(--exp);}
+.add-row{display:flex;align-items:center;gap:8px;padding:10px 0 2px;cursor:pointer;touch-action:manipulation;}
+.add-row-ic{width:30px;height:30px;border-radius:9px;background:rgba(200,131,74,.12);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--acc);flex-shrink:0;}
+.add-row-txt{font-size:13px;color:var(--acc);font-weight:700;}
+
+/* METAS */
+.meta-card{background:var(--sur);border-radius:14px;padding:13px;border:1px solid var(--brd);margin-bottom:9px;box-shadow:var(--sh);}
+.meta-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;}
+.meta-nm{font-size:13px;font-weight:700;flex:1;margin-right:8px;}
+.meta-tp{font-size:10px;padding:2px 7px;border-radius:7px;font-weight:700;white-space:nowrap;}
+.meta-tp.corto{background:rgba(61,122,86,.1);color:var(--inc);}
+.meta-tp.mediano{background:rgba(74,127,168,.1);color:var(--a4);}
+.meta-tp.largo{background:rgba(200,131,74,.1);color:var(--acc);}
+.meta-prog{height:5px;background:var(--brd);border-radius:3px;margin-bottom:5px;overflow:hidden;}
+.meta-fill{height:100%;border-radius:3px;transition:width .6s;}
+.meta-vals{display:flex;justify-content:space-between;font-size:10px;color:var(--mu);}
+.meta-ft{display:flex;justify-content:space-between;align-items:center;margin-top:7px;}
+
+/* DEUDA */
+.deuda-card{background:var(--sur);border-radius:14px;padding:13px;border:1px solid var(--brd);margin-bottom:9px;box-shadow:var(--sh);display:flex;align-items:center;gap:11px;}
+.deuda-ic{width:38px;height:38px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:17px;background:rgba(192,74,58,.07);}
+.deuda-info{flex:1;min-width:0;}
+.deuda-nm{font-size:13px;font-weight:700;margin-bottom:2px;}
+.deuda-det{font-size:10px;color:var(--mu);}
+.deuda-amt{font-size:14px;font-weight:700;color:var(--exp);flex-shrink:0;}
+.pri{padding:2px 7px;border-radius:6px;font-size:10px;font-weight:700;display:inline-block;margin-top:2px;}
+.pri.alta{background:rgba(192,74,58,.1);color:var(--exp);}
+.pri.media{background:rgba(200,131,74,.1);color:var(--acc);}
+.pri.baja{background:rgba(61,122,86,.1);color:var(--inc);}
+
+/* DIAG */
+.drow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(232,221,212,.45);}
+.drow:last-child{border-bottom:none;}
+.drow-cat{font-size:12px;}
+.drow-vals{display:flex;gap:9px;align-items:center;}
+.drow-v{font-size:10px;text-align:right;}
+.drow-v span{display:block;font-size:9px;color:var(--mu);}
+.drow-d{font-size:10px;font-weight:700;}
+.drow-d.ok{color:var(--inc);}.drow-d.bad{color:var(--exp);}
+
+/* PROYECCIÓN */
+.proj-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:11px;}
+.proj-wrap table{width:100%;border-collapse:collapse;font-size:10px;min-width:480px;}
+.proj-wrap th{background:var(--bg);padding:7px 8px;text-align:right;white-space:nowrap;font-weight:700;color:var(--mu);border-bottom:1px solid var(--brd);}
+.proj-wrap th:first-child{text-align:left;}
+.proj-wrap td{padding:7px 8px;border-bottom:1px solid rgba(232,221,212,.35);text-align:right;white-space:nowrap;}
+.proj-wrap td:first-child{text-align:left;font-weight:600;font-size:11px;}
+.proj-wrap tr:last-child td{font-weight:700;background:rgba(200,131,74,.04);}
+
+/* EDU */
+.edu-card{background:var(--sur);border-radius:13px;padding:12px 13px;border:1px solid var(--brd);margin-bottom:7px;display:flex;align-items:flex-start;gap:9px;}
+.edu-ic{font-size:18px;flex-shrink:0;margin-top:1px;}
+.edu-term{font-size:13px;font-weight:700;margin-bottom:2px;}
+.edu-def{font-size:11px;color:var(--mu);line-height:1.5;}
+.edu-apply{display:inline-block;margin-top:6px;padding:3px 10px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--brd);background:var(--bg);color:var(--mu);touch-action:manipulation;-webkit-appearance:none;}
+.edu-apply.applied{background:rgba(61,122,86,.1);color:var(--inc);border-color:var(--inc);}
+.edu-apply.process{background:rgba(200,131,74,.1);color:var(--acc);border-color:var(--acc);}
+.chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:13px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.chips::-webkit-scrollbar{display:none;}
+.chip{padding:6px 14px;border-radius:18px;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;border:1.5px solid var(--brd);background:var(--sur);color:var(--mu);touch-action:manipulation;flex-shrink:0;}
+.chip.active{background:var(--acc);color:#fff;border-color:var(--acc);}
+
+/* METAS GRANDES */
+.mg-t{font-family:'Playfair Display',serif;font-size:14px;margin-bottom:11px;padding-bottom:7px;border-bottom:2px solid var(--brd);display:flex;align-items:center;gap:7px;}
+.mg-f{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(232,221,212,.38);font-size:12px;}
+.mg-f:last-child{border-bottom:none;}
+.mg-fl{color:var(--mu);}
+.mg-fv{font-weight:700;}
+.mg-fv.calc{color:var(--acc);}
+.mg-fv.good{color:var(--inc);}
+
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(245,240,235,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--brd);display:flex;z-index:100;padding:9px 0;padding-bottom:calc(9px + env(safe-area-inset-bottom));}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:3px 0;touch-action:manipulation;-webkit-user-select:none;}
+.ni-ic{font-size:17px;transition:transform .12s;}
+.ni-lbl{font-size:9px;color:var(--mu);font-weight:700;}
+.ni.active .ni-lbl{color:var(--acc);}
+.ni.active .ni-ic{transform:scale(1.1);}
+
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(42,31,20,.52);display:flex;align-items:flex-end;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity .22s;-webkit-overflow-scrolling:touch;}
+.mo.open{opacity:1;pointer-events:all;}
+.mo-box{background:var(--sur);border-radius:22px 22px 0 0;width:100%;max-width:430px;border-top:1px solid var(--brd);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,1,.56,1);overflow-y:auto;-webkit-overflow-scrolling:touch;max-height:92vh;max-height:92dvh;padding:18px 18px 0;padding-bottom:calc(30px + env(safe-area-inset-bottom));}
+.mo.open .mo-box{transform:translateY(0);}
+.mo-handle{width:34px;height:4px;background:var(--brd);border-radius:2px;margin:0 auto 16px;}
+.mo-title{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:14px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:105px;left:50%;transform:translateX(-50%) translateY(8px);background:#2a1f14;color:#fff;padding:9px 18px;border-radius:20px;font-size:12px;font-weight:700;opacity:0;transition:all .22s;pointer-events:none;z-index:999;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* BADGE */
+.badge{padding:3px 9px;border-radius:7px;font-size:10px;font-weight:700;display:inline-block;}
+.bg-ok{background:rgba(61,122,86,.1);color:var(--inc);}
+.bg-warn{background:rgba(192,74,58,.1);color:var(--exp);}
+.bg-info{background:rgba(74,127,168,.1);color:var(--a4);}
+
+[onclick],button{touch-action:manipulation;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ██ HOME ██ -->
+<div class="screen active" id="s-home">
+  <div class="tb">
+    <div><div class="brand">FinFlow</div><div class="sub" id="homeSubtitle">Ene 2026 · Análisis Financiero</div></div>
+    <div class="ava">KS</div>
+  </div>
+  <div style="padding:0 14px 14px">
+    <div class="hero">
+      <div class="h-lbl">Balance Personal</div>
+      <div class="h-name">Kimberly Salazar · Ing. Financiera</div>
+      <div class="h-bal">$<em id="hBal">0</em></div>
+      <div class="h-msg" id="hMsg">Toca ✏️ Ingresar Datos para comenzar</div>
+      <div class="h-row">
+        <div class="h-stat"><div class="h-stat-lbl">Ingresos</div><div class="h-stat-val c-inc" id="hInc">$0</div></div>
+        <div class="h-stat"><div class="h-stat-lbl">Egresos</div><div class="h-stat-val c-exp" id="hExp">$0</div></div>
+        <div class="h-stat"><div class="h-stat-lbl">Ahorro</div><div class="h-stat-val c-sav" id="hSav">$0</div></div>
+        <div class="h-stat"><div class="h-stat-lbl">Deudas</div><div class="h-stat-val c-deb" id="hDeb">$0</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hd"><div class="sec-title">Módulos</div></div>
+    <div class="mod-grid">
+      <div class="mod" onclick="go('s-diag')"><div class="mod-ic">📊</div><div class="mod-lbl">Diagnóstico</div><div class="mod-val" style="color:var(--mu)">Ing·Egr·Balance</div></div>
+      <div class="mod" onclick="go('s-pres')"><div class="mod-ic">💰</div><div class="mod-lbl">Presupuesto</div><div class="mod-val" style="color:var(--mu)">50/30/20</div></div>
+      <div class="mod" onclick="go('s-metas')"><div class="mod-ic">🎯</div><div class="mod-lbl">Metas</div><div class="mod-val" style="color:var(--mu)" id="hMetasC">0 metas</div></div>
+      <div class="mod" onclick="go('s-deudas')"><div class="mod-ic">📉</div><div class="mod-lbl">Deudas</div><div class="mod-val" style="color:var(--exp)" id="hDeudasC">$0</div></div>
+      <div class="mod" onclick="go('s-proy')"><div class="mod-ic">📅</div><div class="mod-lbl">Proyección</div><div class="mod-val" style="color:var(--mu)">12 meses</div></div>
+      <div class="mod" onclick="go('s-edu')"><div class="mod-ic">📚</div><div class="mod-lbl">Educación</div><div class="mod-val" style="color:var(--mu)">Conceptos</div></div>
+      <div class="mod" onclick="go('s-mg')"><div class="mod-ic">🏠</div><div class="mod-lbl">Metas Grandes</div><div class="mod-val" style="color:var(--mu)">Vivienda·Viaje</div></div>
+      <div class="mod" onclick="om('m-datos')" style="border-color:var(--acc)"><div class="mod-ic">✏️</div><div class="mod-lbl">Ingresar Datos</div><div class="mod-val" style="color:var(--acc)">Comenzar →</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ██ DIAGNÓSTICO ██ -->
+<div class="screen" id="s-diag">
+  <div class="tb"><div><div class="back" onclick="go('s-home')">← Inicio</div><div class="brand" style="font-size:16px">📊 Diagnóstico</div></div><div class="ava">KS</div></div>
+  <div class="sec">
+    <div class="card">
+      <div class="card-title">Ingresos vs Egresos</div>
+      <div class="card-sub">Flujo de caja mensual — edita en ✏️ Datos</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:13px">
+        <div style="text-align:center;padding:9px;background:rgba(61,122,86,.06);border-radius:11px;border:1px solid rgba(61,122,86,.12)"><div style="font-size:9px;color:var(--mu);text-transform:uppercase;margin-bottom:2px">Ingresos</div><div style="font-size:14px;font-weight:700;color:var(--inc)" id="dInc">$0</div></div>
+        <div style="text-align:center;padding:9px;background:rgba(192,74,58,.06);border-radius:11px;border:1px solid rgba(192,74,58,.12)"><div style="font-size:9px;color:var(--mu);text-transform:uppercase;margin-bottom:2px">Egresos</div><div style="font-size:14px;font-weight:700;color:var(--exp)" id="dExp">$0</div></div>
+        <div style="text-align:center;padding:9px;background:rgba(74,127,168,.06);border-radius:11px;border:1px solid rgba(74,127,168,.12)"><div style="font-size:9px;color:var(--mu);text-transform:uppercase;margin-bottom:2px">Balance</div><div style="font-size:14px;font-weight:700;color:var(--a4)" id="dBal">$0</div></div>
+      </div>
+      <div id="dCats"><div style="text-align:center;padding:14px;color:var(--mu);font-size:12px">Ingresa tus datos para ver el análisis</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔍 Fugas de Dinero</div>
+      <div class="card-sub">Donde gastas más de lo planeado</div>
+      <div id="dFugas"><div style="text-align:center;padding:12px;color:var(--mu);font-size:12px">Ingresa gastos reales para detectar fugas</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ██ PRESUPUESTO ██ -->
+<div class="screen" id="s-pres">
+  <div class="tb"><div><div class="back" onclick="go('s-home')">← Inicio</div><div class="brand" style="font-size:16px">💰 Presupuesto 50/30/20</div></div></div>
+  <div class="sec">
+    <div class="card">
+      <div class="card-title">Regla 50/30/20</div>
+      <div class="card-sub">Distribución ideal de tus ingresos</div>
+      <div id="pBars"><div style="text-align:center;padding:14px;color:var(--mu);font-size:12px">Ingresa tus datos para ver el análisis</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💾 Plan de Ahorro</div>
+      <div class="card-sub">Destinos de ahorro mensual</div>
+      <div id="pSav"><div style="text-align:center;padding:12px;color:var(--mu);font-size:12px">Ingresa tu plan de ahorro</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ██ METAS ██ -->
+<div class="screen" id="s-metas">
+  <div class="tb">
+    <div><div class="back" onclick="go('s-home')">← Inicio</div><div class="brand" style="font-size:16px">🎯 Metas de Ahorro</div></div>
+    <div onclick="om('m-addmeta')" style="width:32px;height:32px;border-radius:9px;background:var(--acc);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;cursor:pointer;touch-action:manipulation;">+</div>
+  </div>
+  <div class="sec">
+    <div class="card"><div class="card-title">🛡️ Fondo de Emergencia</div><div id="fondo"><div style="font-size:12px;color:var(--mu)">Ingresa tus gastos para calcular el fondo.</div></div></div>
+    <div class="sec-hd" style="margin-top:2px"><div class="sec-title" style="font-size:14px">Mis Metas</div></div>
+    <div id="metasList"><div style="text-align:center;padding:22px;color:var(--mu);font-size:12px">No hay metas. Toca + para agregar.</div></div>
+  </div>
+</div>
+
+<!-- ██ DEUDAS ██ -->
+<div class="screen" id="s-deudas">
+  <div class="tb">
+    <div><div class="back" onclick="go('s-home')">← Inicio</div><div class="brand" style="font-size:16px">📉 Manejo de Deudas</div></div>
+    <div onclick="om('m-adddeuda')" style="width:32px;height:32px;border-radius:9px;background:var(--exp);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;cursor:pointer;touch-action:manipulation;">+</div>
+  </div>
+  <div class="sec">
+    <div class="card" style="margin-bottom:11px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+        <div style="text-align:center;padding:11px;background:rgba(192,74,58,.05);border-radius:11px"><div style="font-size:9px;color:var(--mu);text-transform:uppercase;margin-bottom:2px">Total Deudas</div><div style="font-size:17px;font-weight:700;color:var(--exp)" id="tDeu">$0</div></div>
+        <div style="text-align:center;padding:11px;background:rgba(200,131,74,.05);border-radius:11px"><div style="font-size:9px;color:var(--mu);text-transform:uppercase;margin-bottom:2px">Cuota/Mes</div><div style="font-size:17px;font-weight:700;color:var(--acc)" id="tCuo">$0</div></div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:11px;background:rgba(74,127,168,.03);border-color:rgba(74,127,168,.18)">
+      <div style="font-size:12px;font-weight:700;color:var(--a4);margin-bottom:4px">❄️ Bola de Nieve</div>
+      <div style="font-size:11px;color:var(--mu);line-height:1.6">Paga el mínimo de todas y enfoca el dinero extra en la de menor saldo. Al eliminarla, ese pago pasa a la siguiente.</div>
+    </div>
+    <div id="deudasList"><div style="text-align:center;padding:22px;color:var(--mu);font-size:12px">No hay deudas. Toca + para agregar.</div></div>
+  </div>
+</div>
+
+<!-- ██ PROYECCIÓN ██ -->
+<div class="screen" id="s-proy">
+  <div class="tb"><div><div class="back" onclick="go('s-home')">← Inicio</div><div class="brand" style="font-size:16px">📅 Proyección 12 Meses</div></div></div>
+  <div class="sec">
+    <div class="card"><div class="card-title">Proyección 2026</div><div class="card-sub">Desliza la tabla horizontalmente →</div><div class="proj-wrap"><table id="projTable"></table></div></div>
+    <div class="card"><div class="card-title">📊 Resumen Anual</div><div id="projRes"><div style="text-align:center;padding:12px;color:var(--mu);font-size:12px">Ingresa datos para ver el resumen</div></div></div>
+  </div>
+</div>
+
+<!-- ██ EDUCACIÓN ██ -->
+<div class="screen" id="s-edu">
+  <div class="tb">
+    <div><div class="back" onclick="go('s-home')">← Inicio</div><div class="brand" style="font-size:16px">📚 Educación Financiera</div></div>
+    <div onclick="om('m-addedu')" style="width:32px;height:32px;border-radius:9px;background:var(--a4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;cursor:pointer;touch-action:manipulation;">+</div>
+  </div>
+  <div class="sec">
+    <div class="chips">
+      <div class="chip active" onclick="filterEdu('all',this)">Todos</div>
+      <div class="chip" onclick="filterEdu('conceptos',this)">💡 Conceptos</div>
+      <div class="chip" onclick="filterEdu('credito',this)">💳 Crédito</div>
+      <div class="chip" onclick="filterEdu('habitos',this)">🌱 Hábitos</div>
+    </div>
+    <div id="eduList"></div>
+  </div>
+</div>
+
+<!-- ██ METAS GRANDES ██ -->
+<div class="screen" id="s-mg">
+  <div class="tb"><div><div class="back" onclick="go('s-home')">← Inicio</div><div class="brand" style="font-size:16px">🏠 Metas Grandes</div></div></div>
+  <div class="sec">
+    <div class="card">
+      <div class="mg-t">🏠 Vivienda Propia</div>
+      <div class="fg">
+        <div class="fl"><label>Precio objetivo ($)</label><input class="fi" id="vPrecio" type="tel" inputmode="decimal" placeholder="0" oninput="cViv()"></div>
+        <div class="fl"><label>Ya tengo ($)</label><input class="fi" id="vAho" type="tel" inputmode="decimal" placeholder="0" oninput="cViv()"></div>
+        <div class="fl"><label>Ahorro mensual ($)</label><input class="fi" id="vMen" type="tel" inputmode="decimal" placeholder="0" oninput="cViv()"></div>
+      </div>
+      <div class="mg-f"><span class="mg-fl">Cuota inicial (20%)</span><span class="mg-fv calc" id="vCuota">$0</span></div>
+      <div class="mg-f"><span class="mg-fl">Falta ahorrar</span><span class="mg-fv" id="vFalta">$0</span></div>
+      <div class="mg-f"><span class="mg-fl">Meses para lograrlo</span><span class="mg-fv good" id="vMeses">—</span></div>
+    </div>
+    <div class="card">
+      <div class="mg-t">🚗 Vehículo</div>
+      <div class="fg">
+        <div class="fl"><label>Precio objetivo ($)</label><input class="fi" id="cPrecio" type="tel" inputmode="decimal" placeholder="0" oninput="cCar()"></div>
+        <div class="fl"><label>Ya tengo ($)</label><input class="fi" id="cAho" type="tel" inputmode="decimal" placeholder="0" oninput="cCar()"></div>
+        <div class="fl"><label>Ahorro mensual ($)</label><input class="fi" id="cMen" type="tel" inputmode="decimal" placeholder="0" oninput="cCar()"></div>
+      </div>
+      <div class="mg-f"><span class="mg-fl">Cuota inicial (30%)</span><span class="mg-fv calc" id="cCuota">$0</span></div>
+      <div class="mg-f"><span class="mg-fl">Falta ahorrar</span><span class="mg-fv" id="cFalta">$0</span></div>
+      <div class="mg-f"><span class="mg-fl">Meses para lograrlo</span><span class="mg-fv good" id="cMeses">—</span></div>
+    </div>
+    <div class="card">
+      <div class="mg-t">✈️ Viajes y Experiencias</div>
+      <div class="fl"><label>Destino</label><input class="fi" id="trDest" type="text" placeholder="Tu destino soñado..."></div>
+      <div class="fg">
+        <div class="fl"><label>Costo estimado ($)</label><input class="fi" id="trCosto" type="tel" inputmode="decimal" placeholder="0" oninput="cTrip()"></div>
+        <div class="fl"><label>Ya tengo ($)</label><input class="fi" id="trAho" type="tel" inputmode="decimal" placeholder="0" oninput="cTrip()"></div>
+        <div class="fl"><label>Ahorro mensual ($)</label><input class="fi" id="trMen" type="tel" inputmode="decimal" placeholder="0" oninput="cTrip()"></div>
+      </div>
+      <div class="mg-f"><span class="mg-fl">Falta ahorrar</span><span class="mg-fv" id="trFalta">$0</span></div>
+      <div class="mg-f"><span class="mg-fl">Meses para lograrlo</span><span class="mg-fv good" id="trMeses">—</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <div class="ni active" onclick="go('s-home')" id="n-home"><div class="ni-ic">🏠</div><div class="ni-lbl">Inicio</div></div>
+  <div class="ni" onclick="go('s-diag')" id="n-diag"><div class="ni-ic">📊</div><div class="ni-lbl">Diagnóst.</div></div>
+  <div class="ni" onclick="go('s-pres')" id="n-pres"><div class="ni-ic">💰</div><div class="ni-lbl">Presupuesto</div></div>
+  <div class="ni" onclick="go('s-metas')" id="n-meta"><div class="ni-ic">🎯</div><div class="ni-lbl">Metas</div></div>
+  <div class="ni" onclick="go('s-deudas')" id="n-deu"><div class="ni-ic">📉</div><div class="ni-lbl">Deudas</div></div>
+</nav>
+</div><!-- /app -->
+
+<!-- ══ MODAL: DATOS PRINCIPALES ══ -->
+<div class="mo" id="m-datos" onclick="if(event.target===this)cm('m-datos')">
+  <div class="mo-box">
+    <div class="mo-handle"></div>
+    <div class="mo-title">✏️ Ingresar / Editar Datos</div>
+    <div style="background:rgba(200,131,74,.08);border-radius:10px;padding:9px 11px;margin-bottom:4px;font-size:11px;color:var(--acc)">💛 Basado en <b>AnálisisFinanzasPersonales_Kimberly.xlsx</b></div>
+
+    <!-- INGRESOS PERSONALIZABLES -->
+    <div class="fsec i">💵 Ingresos Mensuales</div>
+    <div id="ingresosFields"></div>
+    <div class="add-row" onclick="addFieldRow('ingresosFields','ing')">
+      <div class="add-row-ic">+</div><div class="add-row-txt">Agregar concepto de ingreso</div>
+    </div>
+
+    <!-- EGRESOS PERSONALIZABLES -->
+    <div class="fsec e">💸 Egresos Presupuestados</div>
+    <div id="egresosFields"></div>
+    <div class="add-row" onclick="addFieldRow('egresosFields','egr')">
+      <div class="add-row-ic">+</div><div class="add-row-txt">Agregar categoría de egreso</div>
+    </div>
+
+    <!-- GASTOS REALES -->
+    <div class="fsec r">📋 Gastos Reales (este mes)</div>
+    <div id="realesFields"></div>
+    <div class="add-row" onclick="addFieldRow('realesFields','real')">
+      <div class="add-row-ic">+</div><div class="add-row-txt">Agregar gasto real</div>
+    </div>
+
+    <!-- AHORRO -->
+    <div class="fsec s">💾 Plan de Ahorro Mensual</div>
+    <div id="ahorroFields"></div>
+    <div class="add-row" onclick="addFieldRow('ahorroFields','aho')">
+      <div class="add-row-ic">+</div><div class="add-row-txt">Agregar concepto de ahorro</div>
+    </div>
+
+    <div style="padding:16px 0 6px">
+      <button class="btn btn-p" onclick="saveData()">💾 Guardar y Calcular Todo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: NUEVA META ══ -->
+<div class="mo" id="m-addmeta" onclick="if(event.target===this)cm('m-addmeta')">
+  <div class="mo-box">
+    <div class="mo-handle"></div>
+    <div class="mo-title" id="metaModalTitle">🎯 Nueva Meta</div>
+    <input type="hidden" id="metaEditIdx" value="-1">
+    <div class="fl"><label>Nombre de la meta</label><input class="fi" id="mNom" type="text" placeholder="Ej: Viaje a Europa"></div>
+    <div class="fl"><label>Tipo</label>
+      <select class="fi" id="mTipo">
+        <option value="corto">Corto plazo (menos de 1 año)</option>
+        <option value="mediano">Mediano plazo (1-3 años)</option>
+        <option value="largo">Largo plazo (más de 3 años)</option>
+      </select>
+    </div>
+    <div class="fg">
+      <div class="fl"><label>Costo total ($)</label><input class="fi" id="mCosto" type="tel" inputmode="decimal" placeholder="0"></div>
+      <div class="fl"><label>Ya tengo ($)</label><input class="fi" id="mTengo" type="tel" inputmode="decimal" placeholder="0"></div>
+      <div class="fl"><label>Ahorro mensual ($)</label><input class="fi" id="mMen" type="tel" inputmode="decimal" placeholder="0"></div>
+    </div>
+    <div style="padding:12px 0 6px"><button class="btn btn-p" onclick="saveMeta()">Guardar Meta</button></div>
+  </div>
+</div>
+
+<!-- ══ MODAL: NUEVA DEUDA ══ -->
+<div class="mo" id="m-adddeuda" onclick="if(event.target===this)cm('m-adddeuda')">
+  <div class="mo-box">
+    <div class="mo-handle"></div>
+    <div class="mo-title" id="deudaModalTitle">📉 Nueva Deuda</div>
+    <input type="hidden" id="deudaEditIdx" value="-1">
+    <div class="fl"><label>Tipo de deuda</label>
+      <select class="fi" id="dTipo">
+        <option>Tarjeta de crédito</option><option>Crédito de consumo</option>
+        <option>Crédito de vehículo</option><option>Crédito hipotecario</option>
+        <option>Deuda familiar / personal</option><option>Crédito educativo</option><option>Otro</option>
+      </select>
+    </div>
+    <div class="fg">
+      <div class="fl"><label>Saldo total ($)</label><input class="fi" id="dSaldo" type="tel" inputmode="decimal" placeholder="0"></div>
+      <div class="fl"><label>Cuota mensual ($)</label><input class="fi" id="dCuota" type="tel" inputmode="decimal" placeholder="0"></div>
+      <div class="fl"><label>Tasa interés (%)</label><input class="fi" id="dTasa" type="tel" inputmode="decimal" placeholder="0"></div>
+      <div class="fl"><label>Prioridad</label>
+        <select class="fi" id="dPri">
+          <option value="alta">Alta</option><option value="media">Media</option><option value="baja">Baja</option>
+        </select>
+      </div>
+    </div>
+    <div style="padding:12px 0 6px"><button class="btn btn-p" onclick="saveDeuda()">Guardar Deuda</button></div>
+  </div>
+</div>
+
+<!-- ══ MODAL: NUEVO CONCEPTO EDU ══ -->
+<div class="mo" id="m-addedu" onclick="if(event.target===this)cm('m-addedu')">
+  <div class="mo-box">
+    <div class="mo-handle"></div>
+    <div class="mo-title" id="eduModalTitle">📚 Nuevo Concepto</div>
+    <input type="hidden" id="eduEditIdx" value="-1">
+    <div class="fl"><label>Ícono (emoji)</label><input class="fi" id="eIco" type="text" placeholder="💡"></div>
+    <div class="fl"><label>Término</label><input class="fi" id="eTerm" type="text" placeholder="Ej: Diversificación"></div>
+    <div class="fl"><label>Definición</label><textarea class="fi" id="eDef" rows="3" placeholder="Explica el concepto..." style="resize:none;height:80px"></textarea></div>
+    <div class="fl"><label>Categoría</label>
+      <select class="fi" id="eCat">
+        <option value="conceptos">💡 Conceptos</option>
+        <option value="credito">💳 Crédito</option>
+        <option value="habitos">🌱 Hábitos</option>
+      </select>
+    </div>
+    <div style="padding:12px 0 6px"><button class="btn btn-p" onclick="saveEdu()">Guardar Concepto</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// STATE — todo editable
+// ══════════════════════════════════════════════════════
+const S = {
+  // Ingresos: array de {label, val}
+  ing: [
+    {label:'Salario / Nómina', val:0},
+    {label:'Freelance / Independ.', val:0},
+    {label:'Arriendos', val:0},
+    {label:'Bonificaciones (÷12)', val:0},
+    {label:'Otros ingresos', val:0}
+  ],
+  // Egresos presupuestados
+  egr: [
+    {label:'🏠 Vivienda', val:0},
+    {label:'🍔 Alimentación', val:0},
+    {label:'🚗 Transporte', val:0},
+    {label:'💡 Servicios públicos', val:0},
+    {label:'📱 Telecomunicaciones', val:0},
+    {label:'👗 Ropa y calzado', val:0},
+    {label:'💊 Salud', val:0},
+    {label:'🎭 Entretenimiento', val:0},
+    {label:'📚 Educación', val:0},
+    {label:'💳 Cuotas deudas', val:0},
+    {label:'🐾 Mascotas', val:0},
+    {label:'🎁 Imprevistos', val:0}
+  ],
+  // Gastos reales
+  real: [
+    {label:'🏠 Vivienda real', val:0},
+    {label:'🍔 Alimentación real', val:0},
+    {label:'🚗 Transporte real', val:0},
+    {label:'💊 Salud real', val:0}
+  ],
+  // Ahorro
+  aho: [
+    {label:'Fondo emergencia', val:0},
+    {label:'Metas corto plazo', val:0},
+    {label:'Metas largo plazo', val:0},
+    {label:'Inversión', val:0},
+    {label:'Vacaciones', val:0}
+  ],
+  metas: [],
+  deudas: []
+};
+
+// Educación — editable
+let EDU = [
+  {cat:'conceptos',ico:'💵',term:'Ingreso',def:'Todo el dinero que recibes: salario, freelance, arriendos, etc.'},
+  {cat:'conceptos',ico:'💸',term:'Egreso / Gasto',def:'Todo el dinero que sale: necesidades, deseos, deudas.'},
+  {cat:'conceptos',ico:'🏦',term:'Ahorro',def:'Ingreso − Gastos = Dinero que queda para el futuro.'},
+  {cat:'conceptos',ico:'📋',term:'Presupuesto',def:'Plan de cómo vas a usar tu dinero antes de que llegue.'},
+  {cat:'conceptos',ico:'📈',term:'Flujo de caja',def:'Movimiento real de dinero: entradas y salidas en el tiempo.'},
+  {cat:'conceptos',ico:'🏗️',term:'Activo',def:'Algo que te genera dinero (inversión, arriendo, negocio, etc.).'},
+  {cat:'conceptos',ico:'⚖️',term:'Pasivo',def:'Algo que te quita dinero (deuda, cuota, obligación mensual).'},
+  {cat:'conceptos',ico:'💎',term:'Patrimonio neto',def:'Activos − Pasivos = Lo que realmente vale tu situación financiera.'},
+  {cat:'conceptos',ico:'📉',term:'Inflación',def:'Aumento de precios que reduce el poder adquisitivo de tu dinero.'},
+  {cat:'conceptos',ico:'🔄',term:'Interés compuesto',def:'Ganar (o pagar) intereses sobre los intereses acumulados. ¡El tiempo es tu aliado!'},
+  {cat:'credito',ico:'⭐',term:'Score crediticio',def:'Puntaje que evalúa qué tan buen pagador eres. Cuida tu historial siempre.'},
+  {cat:'credito',ico:'💰',term:'Tasa de interés efectiva',def:'El costo real del dinero prestado. Siempre compara tasas antes de pedir crédito.'},
+  {cat:'credito',ico:'💳',term:'Cupo de tarjeta',def:'Usa máximo el 30% de tu cupo para proteger tu score crediticio.'},
+  {cat:'credito',ico:'📅',term:'Fecha de corte vs pago',def:'Corte: cierra tu ciclo. Pago: cuando debes pagar para evitar intereses.'},
+  {cat:'credito',ico:'✅',term:'Deuda buena vs mala',def:'Buena genera valor (estudios, vivienda). Mala: consumo que no genera valor.'},
+  {cat:'credito',ico:'🔀',term:'Refinanciación',def:'Cambiar condiciones de una deuda para obtener menor tasa de interés.'},
+  {cat:'habitos',ico:'🎯',term:'Paga primero a ti mismo',def:'Separa el ahorro apenas recibas tu ingreso, antes de cualquier gasto.'},
+  {cat:'habitos',ico:'📒',term:'Registra tus gastos',def:'Anota todo lo que gastas. Te ayuda a identificar fugas y patrones de consumo.'},
+  {cat:'habitos',ico:'🌿',term:'Vive bajo tus posibilidades',def:'Gasta menos de lo que ganas. La diferencia es tu poder financiero.'},
+  {cat:'habitos',ico:'🤖',term:'Automatiza el ahorro',def:'Configura transferencias automáticas el día de pago. Lo que no ves, no gastas.'},
+  {cat:'habitos',ico:'🎓',term:'Edúcate continuamente',def:'Leer libros de finanzas transforma tu mentalidad y tus resultados económicos.'}
+];
+const eduState = {};
+
+const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const navMap = {'s-home':'n-home','s-diag':'n-diag','s-pres':'n-pres','s-metas':'n-meta','s-deudas':'n-deu'};
+
+// ══════════════════════════════════════════════════════
+// NAV / MODAL
+// ══════════════════════════════════════════════════════
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  if(navMap[id]) document.getElementById(navMap[id]).classList.add('active');
+  window.scrollTo(0,0);
+}
+function om(id){
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow='hidden';
+  document.body.style.position='fixed';
+  document.body.style.width='100%';
+}
+function cm(id){
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow='';
+  document.body.style.position='';
+  document.body.style.width='';
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+const gN=id=>{const v=(document.getElementById(id)||{}).value||''; return parseFloat(v.replace(/,/g,'.'))||0;};
+const fmt=v=>'$'+Math.round(v).toLocaleString('es-CO');
+const pct=(v,t)=>t>0?Math.round(v/t*100):0;
+const sumA=arr=>arr.reduce((a,b)=>a+(b.val||0),0);
+
+// ══════════════════════════════════════════════════════
+// RENDERIZAR CAMPOS DINÁMICOS EN MODAL DATOS
+// ══════════════════════════════════════════════════════
+function renderDataFields(){
+  renderGroup('ingresosFields', S.ing, 'ing');
+  renderGroup('egresosFields', S.egr, 'egr');
+  renderGroup('realesFields', S.real, 'real');
+  renderGroup('ahorroFields', S.aho, 'aho');
+}
+
+function renderGroup(containerId, arr, prefix){
+  const c = document.getElementById(containerId);
+  c.innerHTML = arr.map((item, i) => `
+    <div class="fg" style="margin-bottom:6px;align-items:center" id="${prefix}_row_${i}">
+      <div class="fl" style="grid-column:span 1">
+        <label style="font-size:10px">${item.label}</label>
+        <input class="fi" id="${prefix}_v_${i}" type="tel" inputmode="decimal" placeholder="0" value="${item.val||''}">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;margin-top:16px;flex-shrink:0">
+        <button class="ic-btn edit" onclick="editFieldLabel('${prefix}',${i})" title="Renombrar">✏️</button>
+        <button class="ic-btn del" onclick="delField('${prefix}',${i})" title="Eliminar">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addFieldRow(containerId, prefix){
+  const label = prompt('Nombre del nuevo concepto:');
+  if(!label) return;
+  S[prefix].push({label, val:0});
+  renderGroup(containerId, S[prefix], prefix);
+  toast('✅ Concepto agregado');
+}
+
+function editFieldLabel(prefix, idx){
+  const newLabel = prompt('Nuevo nombre:', S[prefix][idx].label);
+  if(!newLabel) return;
+  S[prefix][idx].label = newLabel;
+  const containerId = {ing:'ingresosFields',egr:'egresosFields',real:'realesFields',aho:'ahorroFields'}[prefix];
+  renderGroup(containerId, S[prefix], prefix);
+  toast('✅ Nombre actualizado');
+}
+
+function delField(prefix, idx){
+  if(!confirm('¿Eliminar este concepto?')) return;
+  S[prefix].splice(idx,1);
+  const containerId = {ing:'ingresosFields',egr:'egresosFields',real:'realesFields',aho:'ahorroFields'}[prefix];
+  renderGroup(containerId, S[prefix], prefix);
+  toast('🗑️ Eliminado');
+}
+
+// ══════════════════════════════════════════════════════
+// GUARDAR DATOS
+// ══════════════════════════════════════════════════════
+function saveData(){
+  ['ing','egr','real','aho'].forEach(prefix=>{
+    S[prefix].forEach((item,i)=>{
+      const el = document.getElementById(`${prefix}_v_${i}`);
+      if(el) item.val = parseFloat(el.value.replace(/,/g,'.'))||0;
+    });
+  });
+  cm('m-datos');
+  calcAll();
+  toast('✅ Datos guardados y calculados');
+}
+
+// ══════════════════════════════════════════════════════
+// CALCULAR TODO
+// ══════════════════════════════════════════════════════
+function calcAll(){
+  const tInc=sumA(S.ing), tExp=sumA(S.egr), tSav=sumA(S.aho);
+  const tDeb=S.deudas.reduce((a,d)=>a+d.saldo,0);
+  const bal=tInc-tExp;
+
+  document.getElementById('hBal').textContent=Math.round(bal).toLocaleString('es-CO');
+  document.getElementById('hInc').textContent=fmt(tInc);
+  document.getElementById('hExp').textContent=fmt(tExp);
+  document.getElementById('hSav').textContent=fmt(tSav);
+  document.getElementById('hDeb').textContent=fmt(tDeb);
+  document.getElementById('hMsg').textContent=bal>=0?`✅ Balance positivo · Ahorro: ${pct(tSav,tInc)}%`:'⚠️ Gastos superan los ingresos';
+  document.getElementById('hMetasC').textContent=S.metas.length+' metas';
+  document.getElementById('hDeudasC').textContent=fmt(tDeb);
+
+  rDiag(tInc,tExp,bal);
+  rPres(tInc,tExp);
+  rMetas(tExp);
+  rDeudas();
+  rProy();
+}
+
+// ══════════════════════════════════════════════════════
+// DIAGNÓSTICO
+// ══════════════════════════════════════════════════════
+function rDiag(inc,exp,bal){
+  document.getElementById('dInc').textContent=fmt(inc);
+  document.getElementById('dExp').textContent=fmt(exp);
+  document.getElementById('dBal').textContent=fmt(bal);
+
+  // Armar tabla comparando egr presupuestado vs real
+  const cats = S.egr.map(e=>{
+    // buscar equivalente en reales por nombre similar
+    const rMatch = S.real.find(r=>r.label.toLowerCase().includes(e.label.replace(/[🏠🍔🚗💡📱👗💊🎭📚💳🐾🎁]/g,'').trim().toLowerCase().split(' ')[0]));
+    return {icon:e.label.match(/\p{Emoji}/u)?.[0]||'📌', name:e.label.replace(/\p{Emoji}/gu,'').trim(), pres:e.val, real:rMatch?rMatch.val:e.val};
+  }).filter(c=>c.pres>0||c.real>0);
+
+  document.getElementById('dCats').innerHTML = cats.length
+    ? cats.map(c=>{const d=c.pres-c.real;return `<div class="drow"><div class="drow-cat">${c.icon} ${c.name}</div><div class="drow-vals"><div class="drow-v">${fmt(c.pres)}<span>Pres.</span></div><div class="drow-v">${fmt(c.real)}<span>Real</span></div><div class="drow-d ${d>=0?'ok':'bad'}">${d>=0?'✓':'!'} ${fmt(Math.abs(d))}</div></div></div>`;}).join('')
+    : '<div style="text-align:center;padding:14px;color:var(--mu);font-size:12px">Ingresa tus datos</div>';
+
+  // Fugas: donde real > presupuestado
+  const fugas = S.real.filter(r=>r.val>0).map(r=>{
+    const eMatch = S.egr.find(e=>e.label.toLowerCase().includes(r.label.replace(/[🏠🍔🚗💊📋]/g,'').replace('real','').trim().toLowerCase().split(' ')[0]));
+    const dif = r.val - (eMatch?eMatch.val:0);
+    return dif>0?{name:r.label,dif}:null;
+  }).filter(Boolean);
+
+  document.getElementById('dFugas').innerHTML = fugas.length
+    ? fugas.map(f=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(232,221,212,.4);font-size:12px"><span>${f.name}</span><span style="color:var(--exp);font-weight:700">+${fmt(f.dif)}</span></div>`).join('')
+    : '<div style="text-align:center;padding:10px;color:var(--inc);font-size:12px">✅ Sin fugas detectadas</div>';
+}
+
+// ══════════════════════════════════════════════════════
+// PRESUPUESTO
+// ══════════════════════════════════════════════════════
+function rPres(inc){
+  const tExp=sumA(S.egr), tSav=sumA(S.aho);
+  // 50% necesidades = todo egreso
+  const cats=[
+    {l:'🏠 50% — Necesidades',c:'#3d7a56',ideal:inc*.5,real:tExp},
+    {l:'🎭 30% — Deseos',c:'#4a7fa8',ideal:inc*.3,real:S.egr.filter(e=>/ropa|entret|mascot|imprev/i.test(e.label)).reduce((a,e)=>a+e.val,0)},
+    {l:'💾 20% — Ahorro',c:'#c8834a',ideal:inc*.2,real:tSav},
+  ];
+  document.getElementById('pBars').innerHTML = cats.map(c=>{
+    const fp=c.ideal>0?Math.min(c.real/c.ideal*100,115):0;
+    const ok=c.real<=c.ideal;
+    return `<div class="bbar"><div class="bbar-hd"><span class="bbar-nm">${c.l}</span><span class="bbar-pc">${pct(c.real,inc)}% / ${pct(c.ideal,inc)}%</span></div><div class="bbar-bg"><div class="bbar-fill" style="width:${fp}%;background:${ok?c.c:'var(--exp)'}"></div></div><div class="bbar-bt"><span class="bv">Ideal: ${fmt(c.ideal)}</span><span class="bv ${ok?'ok':'warn'}">Real: ${fmt(c.real)} ${ok?'✅':'⚠️'}</span></div></div>`;
+  }).join('');
+
+  document.getElementById('pSav').innerHTML = S.aho.filter(a=>a.val>0).length
+    ? S.aho.filter(a=>a.val>0).map(a=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(232,221,212,.4)"><span style="font-size:12px">${a.label}</span><span style="font-size:14px;font-weight:700;color:var(--sav)">${fmt(a.val)}</span></div>`).join('')
+    : '<div style="text-align:center;padding:12px;color:var(--mu);font-size:12px">Ingresa tu plan de ahorro</div>';
+}
+
+// ══════════════════════════════════════════════════════
+// METAS — con edición
+// ══════════════════════════════════════════════════════
+function saveMeta(){
+  const idx=parseInt(document.getElementById('metaEditIdx').value);
+  const m={nombre:document.getElementById('mNom').value.trim(), tipo:document.getElementById('mTipo').value, costo:gN('mCosto'), tengo:gN('mTengo'), mensual:gN('mMen')};
+  if(!m.nombre||!m.costo){toast('⚠️ Completa nombre y costo');return;}
+  if(idx>=0) S.metas[idx]=m; else S.metas.push(m);
+  cm('m-addmeta');
+  ['mNom','mCosto','mTengo','mMen'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('metaEditIdx').value='-1';
+  document.getElementById('metaModalTitle').textContent='🎯 Nueva Meta';
+  rMetas();
+  document.getElementById('hMetasC').textContent=S.metas.length+' metas';
+  toast(idx>=0?'✅ Meta actualizada':'🎯 Meta agregada');
+}
+
+function editMeta(i){
+  const m=S.metas[i];
+  document.getElementById('metaEditIdx').value=i;
+  document.getElementById('metaModalTitle').textContent='✏️ Editar Meta';
+  document.getElementById('mNom').value=m.nombre;
+  document.getElementById('mTipo').value=m.tipo;
+  document.getElementById('mCosto').value=m.costo;
+  document.getElementById('mTengo').value=m.tengo;
+  document.getElementById('mMen').value=m.mensual;
+  om('m-addmeta');
+}
+
+function delMeta(i){
+  if(!confirm('¿Eliminar esta meta?'))return;
+  S.metas.splice(i,1);
+  rMetas();
+  document.getElementById('hMetasC').textContent=S.metas.length+' metas';
+  toast('🗑️ Meta eliminada');
+}
+
+function rMetas(tExp){
+  const gastos=tExp!==undefined?tExp:sumA(S.egr);
+  const fReq=gastos*3, fTen=Math.min(sumA(S.aho)*3,fReq);
+  const fp=fReq>0?Math.min(fTen/fReq*100,100):0;
+  document.getElementById('fondo').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:9px">
+      <div style="text-align:center;padding:9px;background:var(--bg);border-radius:9px"><div style="font-size:9px;color:var(--mu);text-transform:uppercase;margin-bottom:2px">Gastos/Mes</div><div style="font-size:13px;font-weight:700">${fmt(gastos)}</div></div>
+      <div style="text-align:center;padding:9px;background:var(--bg);border-radius:9px"><div style="font-size:9px;color:var(--mu);text-transform:uppercase;margin-bottom:2px">Fondo Req.</div><div style="font-size:13px;font-weight:700;color:var(--acc)">${fmt(fReq)}</div></div>
+      <div style="text-align:center;padding:9px;background:var(--bg);border-radius:9px"><div style="font-size:9px;color:var(--mu);text-transform:uppercase;margin-bottom:2px">Cobertura</div><div style="font-size:13px;font-weight:700;color:var(--inc)">3 meses</div></div>
+    </div>
+    <div class="meta-prog"><div class="meta-fill" style="width:${fp}%;background:var(--inc)"></div></div>
+    <div class="meta-vals" style="margin-top:3px"><span>Tengo: ${fmt(fTen)}</span><span>Necesito: ${fmt(fReq)}</span></div>`;
+
+  const cols={corto:'#3d7a56',mediano:'#4a7fa8',largo:'#c8834a'};
+  document.getElementById('metasList').innerHTML=S.metas.length
+    ? S.metas.map((m,i)=>{
+        const f=Math.max(m.costo-m.tengo,0);
+        const ms=m.mensual>0&&f>0?Math.ceil(f/m.mensual):(f<=0?0:null);
+        const pp=m.costo>0?Math.min(m.tengo/m.costo*100,100):0;
+        return `<div class="meta-card">
+          <div class="meta-hd"><div class="meta-nm">${m.nombre}</div><span class="meta-tp ${m.tipo}">${m.tipo==='corto'?'Corto':m.tipo==='mediano'?'Mediano':'Largo'}</span></div>
+          <div class="meta-prog"><div class="meta-fill" style="width:${pp}%;background:${cols[m.tipo]}"></div></div>
+          <div class="meta-vals"><span>Tengo: ${fmt(m.tengo)}</span><span>Meta: ${fmt(m.costo)}</span></div>
+          <div class="meta-ft">
+            <span style="font-size:11px;color:var(--mu)">Ahorro/mes: <b>${fmt(m.mensual)}</b> · <span style="color:${cols[m.tipo]};font-weight:700">${ms===0?'🎉 ¡Logrado!':ms?ms+' meses':'—'}</span></span>
+            <div style="display:flex;gap:6px"><button class="ic-btn edit" onclick="editMeta(${i})">✏️</button><button class="ic-btn del" onclick="delMeta(${i})">🗑️</button></div>
+          </div>
+        </div>`;
+      }).join('')
+    : '<div style="text-align:center;padding:22px;color:var(--mu);font-size:12px">No hay metas. Toca + para agregar.</div>';
+}
+
+// ══════════════════════════════════════════════════════
+// DEUDAS — con edición
+// ══════════════════════════════════════════════════════
+function saveDeuda(){
+  const idx=parseInt(document.getElementById('deudaEditIdx').value);
+  const tipo=document.getElementById('dTipo').value;
+  const saldo=gN('dSaldo'), cuota=gN('dCuota'), tasa=gN('dTasa');
+  const prioridad=document.getElementById('dPri').value;
+  if(!saldo){toast('⚠️ Ingresa el saldo');return;}
+  const mR=cuota>0?Math.ceil(saldo/cuota):0;
+  const int=saldo*tasa/100*mR/12;
+  const d={tipo,saldo,cuota,tasa,prioridad,mR,int};
+  if(idx>=0) S.deudas[idx]=d; else S.deudas.push(d);
+  S.deudas.sort((a,b)=>a.saldo-b.saldo);
+  cm('m-adddeuda');
+  ['dSaldo','dCuota','dTasa'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('deudaEditIdx').value='-1';
+  document.getElementById('deudaModalTitle').textContent='📉 Nueva Deuda';
+  rDeudas();
+  const td=S.deudas.reduce((a,d)=>a+d.saldo,0);
+  document.getElementById('hDeb').textContent=fmt(td);
+  document.getElementById('hDeudasC').textContent=fmt(td);
+  toast(idx>=0?'✅ Deuda actualizada':'📉 Deuda registrada');
+}
+
+function editDeuda(i){
+  const d=S.deudas[i];
+  document.getElementById('deudaEditIdx').value=i;
+  document.getElementById('deudaModalTitle').textContent='✏️ Editar Deuda';
+  document.getElementById('dTipo').value=d.tipo;
+  document.getElementById('dSaldo').value=d.saldo;
+  document.getElementById('dCuota').value=d.cuota;
+  document.getElementById('dTasa').value=d.tasa;
+  document.getElementById('dPri').value=d.prioridad;
+  om('m-adddeuda');
+}
+
+function delDeuda(i){
+  if(!confirm('¿Eliminar esta deuda?'))return;
+  S.deudas.splice(i,1);
+  rDeudas();
+  const td=S.deudas.reduce((a,d)=>a+d.saldo,0);
+  document.getElementById('hDeb').textContent=fmt(td);
+  document.getElementById('hDeudasC').textContent=fmt(td);
+  toast('🗑️ Deuda eliminada');
+}
+
+function rDeudas(){
+  const ts=S.deudas.reduce((a,d)=>a+d.saldo,0), tc=S.deudas.reduce((a,d)=>a+d.cuota,0);
+  document.getElementById('tDeu').textContent=fmt(ts);
+  document.getElementById('tCuo').textContent=fmt(tc);
+  const ics={'Tarjeta de crédito':'💳','Crédito de consumo':'🏦','Crédito de vehículo':'🚗','Crédito hipotecario':'🏠','Deuda familiar / personal':'👥','Crédito educativo':'📚','Otro':'📄'};
+  document.getElementById('deudasList').innerHTML=S.deudas.length
+    ? S.deudas.map((d,i)=>`<div class="deuda-card">
+        <div class="deuda-ic">${ics[d.tipo]||'📄'}</div>
+        <div class="deuda-info">
+          <div class="deuda-nm">${d.tipo}</div>
+          <div class="deuda-det">Cuota: ${fmt(d.cuota)}/mes · ${d.mR} meses</div>
+          ${d.tasa>0?`<div class="deuda-det">Tasa: ${d.tasa}% · Int. total: ${fmt(d.int)}</div>`:''}
+          <span class="pri ${d.prioridad}">${d.prioridad.charAt(0).toUpperCase()+d.prioridad.slice(1)}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <div class="deuda-amt">${fmt(d.saldo)}</div>
+          <div style="display:flex;gap:5px"><button class="ic-btn edit" onclick="editDeuda(${i})">✏️</button><button class="ic-btn del" onclick="delDeuda(${i})">🗑️</button></div>
+        </div>
+      </div>`).join('')
+    : '<div style="text-align:center;padding:22px;color:var(--mu);font-size:12px">No hay deudas registradas.</div>';
+}
+
+// ══════════════════════════════════════════════════════
+// PROYECCIÓN
+// ══════════════════════════════════════════════════════
+function rProy(){
+  const inc=sumA(S.ing), exp=sumA(S.egr), sav=sumA(S.aho), bal=inc-exp;
+  const th=`<tr><th>Concepto</th>${MESES.map(m=>`<th>${m}</th>`).join('')}<th>TOTAL</th></tr>`;
+  const rows=[
+    {l:'💵 Ingresos',vals:MESES.map(()=>inc),cls:'c-inc'},
+    {l:'💸 Egresos',vals:MESES.map(()=>exp),cls:'c-exp'},
+    {l:'💾 Ahorro',vals:MESES.map(()=>sav),cls:'c-sav'},
+    {l:'📊 Balance',vals:MESES.map(()=>bal),cls:'c-bal'},
+  ];
+  const tb=rows.map(r=>`<tr><td>${r.l}</td>${r.vals.map(v=>`<td class="${r.cls}">${fmt(v)}</td>`).join('')}<td class="${r.cls}">${fmt(r.vals.reduce((a,b)=>a+b,0))}</td></tr>`).join('');
+  document.getElementById('projTable').innerHTML=`<thead>${th}</thead><tbody>${tb}</tbody>`;
+
+  document.getElementById('projRes').innerHTML=`
+    <div class="drow"><span style="font-size:12px;font-weight:600">💵 Ingresos anuales</span><span style="font-size:13px;font-weight:700;color:var(--inc)">${fmt(inc*12)}</span></div>
+    <div class="drow"><span style="font-size:12px;font-weight:600">💸 Egresos anuales</span><span style="font-size:13px;font-weight:700;color:var(--exp)">${fmt(exp*12)}</span></div>
+    <div class="drow"><span style="font-size:12px;font-weight:600">💾 Ahorro anual</span><span style="font-size:13px;font-weight:700;color:var(--sav)">${fmt(sav*12)}</span></div>
+    <div class="drow"><span style="font-size:12px;font-weight:600">📊 Balance anual</span><span style="font-size:13px;font-weight:700;color:var(--a4)">${fmt(bal*12)}</span></div>
+    <div class="drow"><span style="font-size:12px;font-weight:600">🎯 Tasa de ahorro</span><span class="badge ${pct(sav,inc)>=20?'bg-ok':'bg-warn'}">${pct(sav,inc)}% ${pct(sav,inc)>=20?'✅':'⚠️'}</span></div>`;
+}
+
+// ══════════════════════════════════════════════════════
+// EDUCACIÓN — con agregar / editar / eliminar
+// ══════════════════════════════════════════════════════
+function saveEdu(){
+  const idx=parseInt(document.getElementById('eduEditIdx').value);
+  const ico=document.getElementById('eIco').value.trim()||'📌';
+  const term=document.getElementById('eTerm').value.trim();
+  const def=document.getElementById('eDef').value.trim();
+  const cat=document.getElementById('eCat').value;
+  if(!term||!def){toast('⚠️ Completa término y definición');return;}
+  const entry={cat,ico,term,def};
+  if(idx>=0) EDU[idx]=entry; else EDU.push(entry);
+  cm('m-addedu');
+  ['eIco','eTerm','eDef'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('eduEditIdx').value='-1';
+  document.getElementById('eduModalTitle').textContent='📚 Nuevo Concepto';
+  filterEdu('all', document.querySelector('.chip'));
+  toast(idx>=0?'✅ Concepto actualizado':'📚 Concepto agregado');
+}
+
+function editEdu(i){
+  const e=EDU[i];
+  document.getElementById('eduEditIdx').value=i;
+  document.getElementById('eduModalTitle').textContent='✏️ Editar Concepto';
+  document.getElementById('eIco').value=e.ico;
+  document.getElementById('eTerm').value=e.term;
+  document.getElementById('eDef').value=e.def;
+  document.getElementById('eCat').value=e.cat;
+  om('m-addedu');
+}
+
+function delEdu(i){
+  if(!confirm('¿Eliminar este concepto?'))return;
+  EDU.splice(i,1);
+  filterEdu('all', document.querySelector('.chip'));
+  toast('🗑️ Concepto eliminado');
+}
+
+function filterEdu(cat, el){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  if(el) el.classList.add('active');
+  const list=cat==='all'?EDU:EDU.filter(e=>e.cat===cat);
+  document.getElementById('eduList').innerHTML=list.map((e)=>{
+    const gi=EDU.indexOf(e), st=eduState[gi]||'none';
+    return `<div class="edu-card">
+      <div class="edu-ic">${e.ico}</div>
+      <div style="flex:1">
+        <div class="edu-term">${e.term}</div>
+        <div class="edu-def">${e.def}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <span class="edu-apply ${st==='applied'?'applied':st==='process'?'process':''}" onclick="cycleEdu(${gi},this)">${st==='applied'?'✅ Lo aplico':st==='process'?'🔄 En proceso':'⬜ ¿Lo aplico?'}</span>
+          <button class="ic-btn edit" onclick="editEdu(${gi})">✏️</button>
+          <button class="ic-btn del" onclick="delEdu(${gi})">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function cycleEdu(i,el){
+  const ss=['none','process','applied'], cur=eduState[i]||'none';
+  const next=ss[(ss.indexOf(cur)+1)%3];
+  eduState[i]=next;
+  el.className='edu-apply'+(next==='applied'?' applied':next==='process'?' process':'');
+  el.textContent=next==='applied'?'✅ Lo aplico':next==='process'?'🔄 En proceso':'⬜ ¿Lo aplico?';
+}
+
+// ══════════════════════════════════════════════════════
+// METAS GRANDES
+// ══════════════════════════════════════════════════════
+function cViv(){const p=parseFloat(document.getElementById('vPrecio').value)||0,a=parseFloat(document.getElementById('vAho').value)||0,m=parseFloat(document.getElementById('vMen').value)||0,c=p*.2,f=Math.max(c-a,0),ms=m>0&&f>0?Math.ceil(f/m):f<=0?0:null;document.getElementById('vCuota').textContent=fmt(c);document.getElementById('vFalta').textContent=fmt(f);document.getElementById('vMeses').textContent=ms===0?'🎉 ¡Logrado!':ms?ms+' meses':'—';}
+function cCar(){const p=parseFloat(document.getElementById('cPrecio').value)||0,a=parseFloat(document.getElementById('cAho').value)||0,m=parseFloat(document.getElementById('cMen').value)||0,c=p*.3,f=Math.max(c-a,0),ms=m>0&&f>0?Math.ceil(f/m):f<=0?0:null;document.getElementById('cCuota').textContent=fmt(c);document.getElementById('cFalta').textContent=fmt(f);document.getElementById('cMeses').textContent=ms===0?'🎉 ¡Logrado!':ms?ms+' meses':'—';}
+function cTrip(){const c=parseFloat(document.getElementById('trCosto').value)||0,a=parseFloat(document.getElementById('trAho').value)||0,m=parseFloat(document.getElementById('trMen').value)||0,f=Math.max(c-a,0),ms=m>0&&f>0?Math.ceil(f/m):f<=0?0:null;document.getElementById('trFalta').textContent=fmt(f);document.getElementById('trMeses').textContent=ms===0?'🎉 ¡Logrado!':ms?ms+' meses':'—';}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+renderDataFields();
+filterEdu('all', document.querySelector('.chip'));
+rDeudas();
+rMetas(0);
+rPres(0,0);
+rDiag(0,0,0);
+rProy();
+
+// Abrir modal de datos rellena campos con valores guardados
+document.getElementById('m-datos').addEventListener('transitionend', ()=>{});
+</script>
+</body>
+</html>
